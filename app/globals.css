@@ -1,0 +1,249 @@
+/* Zollama site design tokens. Dark dev-tool aesthetic (mirrors System Design Studio)
+   with Zollama's orange identity as the accent. Single theme (dark). */
+:root {
+  --bg: #0b0c10;
+  --surface-1: #0d0e13;
+  --surface-2: #111319;
+  --surface-3: #15171d;
+  --surface-4: #1e222c;
+  --fg: #e7e9ef;
+  --fg-1: #cfd2da;
+  --fg-2: #9aa0ad;
+  --fg-3: #7f8492;
+  --fg-4: #3a3e47;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.11);
+  --hover-fill: rgba(255, 255, 255, 0.06);
+
+  /* Zollama orange */
+  --zo: #f97316;
+  --zo-strong: #fb8c3c;
+  --zo-deep: #c2410c;
+  --zo-soft: rgba(249, 115, 22, 0.13);
+  --zo-border: rgba(249, 115, 22, 0.4);
+  --zo-fg: #ffffff; /* text on orange buttons — white in both themes */
+
+  /* syntax highlighting */
+  --code-comment: #8b949e;
+  --code-str: #3f9d6d;
+  --code-kw: #b45bd6;
+  --code-type: #3a8fc7;
+  --code-num: #c47f3d;
+
+  --maxw: 1080px;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, 'SFMono-Regular', monospace;
+}
+
+/* Light theme — applied when the user (or their system, via the pre-paint script in
+   app/layout.tsx) selects it. Zollama orange stays the accent. */
+:root[data-theme='light'] {
+  --bg: #eef1f5;
+  --surface-1: #ffffff;
+  --surface-2: #ffffff;
+  --surface-3: #f1f3f7;
+  --surface-4: #e6e9ef;
+  --fg: #14171d;
+  --fg-1: #333842;
+  --fg-2: #565c6b;
+  --fg-3: #868c9b;
+  --fg-4: #c2c7d0;
+  --border: rgba(20, 24, 33, 0.1);
+  --border-strong: rgba(20, 24, 33, 0.16);
+  --hover-fill: rgba(20, 24, 33, 0.05);
+  --zo-soft: rgba(249, 115, 22, 0.12);
+  --zo-border: rgba(249, 115, 22, 0.45);
+  /* code colors tuned for a light surface */
+  --code-comment: #6b7280;
+  --code-str: #2f8f5b;
+  --code-kw: #9333ea;
+  --code-type: #1d6fb8;
+  --code-num: #b45309;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Lowercase is the default design identity — applied unconditionally so it holds even
+   before JS / during SSR. The header toggle adds `data-nolower` to opt out. Code and
+   anything marked `.nolower` stay as authored. */
+body {
+  text-transform: lowercase;
+}
+code,
+pre,
+.nolower,
+.nolower * {
+  text-transform: none;
+}
+html[data-nolower] body {
+  text-transform: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--zo-soft);
+}
+
+/* Subtle scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-4) transparent;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--fg);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+code {
+  font-family: var(--font-mono);
+}
+
+/* Shared bits */
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--zo);
+  background: var(--zo-soft);
+  border: 1px solid var(--zo-border);
+  padding: 5px 11px;
+  border-radius: 20px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 18px;
+  border-radius: 11px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.14s, border-color 0.14s, transform 0.06s;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-primary {
+  background: var(--zo);
+  color: var(--zo-fg);
+  border-color: var(--zo);
+}
+.btn-primary:hover {
+  background: var(--zo-strong);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+.btn-ghost:hover {
+  background: var(--hover-fill);
+}
+
+pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+/* Mobile header: drop the secondary text links + logo wordmark so the CTA sits
+   comfortably (links live in the footer; the Z tile still links home). */
+@media (max-width: 640px) {
+  .nav-links {
+    display: none !important;
+  }
+  .brand-word {
+    display: none !important;
+  }
+  /* Shrink the hero code/output type so the cards fit narrow screens without the
+     inner <pre> forcing the grid track wider than the viewport. */
+  .hero-grid pre {
+    font-size: 12px !important;
+  }
+}
+
+/* Subtle hover lift for cards. */
+.lift {
+  transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+}
+.lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--zo-border);
+}
+
+@keyframes zo-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes zo-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* FAQ accordion: hide the native marker, show a themed +/− affordance. */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary {
+  position: relative;
+  padding-right: 28px !important;
+}
+.faq-item summary::after {
+  content: '+';
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--zo);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+}
+.faq-item[open] summary::after {
+  content: '−';
+}
